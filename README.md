@@ -1,4 +1,4 @@
-# Bone marrow cell classification — 20 cell types, above the published baselines
+# Bone marrow cell classification — 20 cell types, above the dataset paper and a 2024 follow-up
 
 Two image classifiers, YOLO and SigLIP, were trained with one fixed recipe, **without dataset-specific tuning**, on the largest public bone marrow cytology dataset (Matek et al. 2021, 171,000+ expert-labelled cells) and tested on a held-out set of 17,137 cells.
 
