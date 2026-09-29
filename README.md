@@ -6,6 +6,24 @@ Two image classifiers, YOLO and SigLIP, were trained with one fixed recipe, **wi
 
 ![Leaderboard](figures/01_leaderboard.png)
 
+## Other published results on this dataset
+
+| Method | Protocol | Macro recall (balanced accuracy) | F1 | Source |
+|---|---|---|---|---|
+| **SigLIP** (ours) | unseen 10 % hold-out, 20 classes | **79.76 %** | macro 0.76 · weighted 0.85 | this repo |
+| **YOLO** (ours) | unseen 10 % hold-out, 20 classes | 79.48 % | **macro 0.77 · weighted 0.86** | this repo |
+| Xception + region-attention embedding (Tarquino et al. 2024) | unseen 20 % test set, 21 classes | 32 % | macro 0.33 · weighted 0.56 | Table 3 |
+| same model, cross-validation | repeated 3-fold CV on the other 80 % | 66 % | macro 0.69 · weighted 0.82 | Table 2 |
+| RegNetY-32GF, as tabulated by Tarquino et al. | 5-fold CV | 75 % ¹ | 0.76 ¹ | Table 4 |
+| Inception-ResNetV2, as tabulated by Tarquino et al. | hold-out | 59 % ¹ | 0.57 ¹ | Table 4 |
+| Siamese network, as tabulated by Tarquino et al. | hold-out | – | **0.81** ¹ | Table 4 |
+
+¹ Averaging (macro or weighted) not stated in the table.
+
+On a test set the model never saw, both of our models are well above the 2024 region-attention model (79.8 % vs 32 % macro recall). The Siamese network listed by Tarquino et al. reports a higher F1 (0.81) than our macro F1 (0.77); its averaging and split are not stated, so we list it without claiming a comparison either way.
+
+A 2025 ensemble study (MobileNetV3 + ResNet18) reports 94 % accuracy on this dataset, but its test table lists about 4,000 test images for every class — including abnormal eosinophils, which have only 8 images in the whole dataset — so its test set must contain augmented copies; we do not compare against it.
+
 | Model | Balanced accuracy | Accuracy | Macro F1 |
 |---|---|---|---|
 | **SigLIP** (ours) | **79.76 %** | 84.99 % | 75.93 % |
@@ -88,24 +106,6 @@ The paper (ResNeXt-50, 250 × 250 px input, classes upsampled to about 25,000 im
 - The only two classes where both models are below the paper are tiny in our test set: immature lymphocytes (6 cells) and other cells (30 cells).
 
 Not the same protocol: the paper averages five folds over all images, we test once on a 10 % hold-out and train on at most 4,000 images per class. Both are per-image random splits of the same 20 classes.
-
-### Other published results on this dataset
-
-| Method | Protocol | Macro recall (balanced accuracy) | F1 | Source |
-|---|---|---|---|---|
-| **SigLIP** (ours) | unseen 10 % hold-out, 20 classes | **79.76 %** | macro 0.76 · weighted 0.85 | this repo |
-| **YOLO** (ours) | unseen 10 % hold-out, 20 classes | 79.48 % | **macro 0.77 · weighted 0.86** | this repo |
-| Xception + region-attention embedding (Tarquino et al. 2024) | unseen 20 % test set, 21 classes | 32 % | macro 0.33 · weighted 0.56 | Table 3 |
-| same model, cross-validation | repeated 3-fold CV on the other 80 % | 66 % | macro 0.69 · weighted 0.82 | Table 2 |
-| RegNetY-32GF, as tabulated by Tarquino et al. | 5-fold CV | 75 % ¹ | 0.76 ¹ | Table 4 |
-| Inception-ResNetV2, as tabulated by Tarquino et al. | hold-out | 59 % ¹ | 0.57 ¹ | Table 4 |
-| Siamese network, as tabulated by Tarquino et al. | hold-out | – | **0.81** ¹ | Table 4 |
-
-¹ Averaging (macro or weighted) not stated in the table.
-
-On a test set the model never saw, both of our models are well above the 2024 region-attention model (79.8 % vs 32 % macro recall). The Siamese network listed by Tarquino et al. reports a higher F1 (0.81) than our macro F1 (0.77); its averaging and split are not stated, so we list it without claiming a comparison either way.
-
-A 2025 ensemble study (MobileNetV3 + ResNet18) reports 94 % accuracy on this dataset, but its test table lists about 4,000 test images for every class — including abnormal eosinophils, which have only 8 images in the whole dataset — so its test set must contain augmented copies; we do not compare against it.
 
 ---
 
