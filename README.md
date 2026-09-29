@@ -1,4 +1,4 @@
-# Bone marrow cell classification — 20 cell types, above the dataset paper
+# Bone marrow cell classification — 20 cell types, above the published baselines
 
 Two image classifiers, YOLO and SigLIP, were trained with one fixed recipe, **without dataset-specific tuning**, on the largest public bone marrow cytology dataset (Matek et al. 2021, 171,000+ expert-labelled cells) and tested on a held-out set of 17,137 cells.
 
@@ -89,6 +89,24 @@ The paper (ResNeXt-50, 250 × 250 px input, classes upsampled to about 25,000 im
 
 Not the same protocol: the paper averages five folds over all images, we test once on a 10 % hold-out and train on at most 4,000 images per class. Both are per-image random splits of the same 20 classes.
 
+### Other published results on this dataset
+
+| Method | Protocol | Macro recall (balanced accuracy) | F1 | Source |
+|---|---|---|---|---|
+| **SigLIP** (ours) | unseen 10 % hold-out, 20 classes | **79.76 %** | macro 0.76 · weighted 0.85 | this repo |
+| **YOLO** (ours) | unseen 10 % hold-out, 20 classes | 79.48 % | **macro 0.77 · weighted 0.86** | this repo |
+| Xception + region-attention embedding (Tarquino et al. 2024) | unseen 20 % test set, 21 classes | 32 % | macro 0.33 · weighted 0.56 | Table 3 |
+| same model, cross-validation | repeated 3-fold CV on the other 80 % | 66 % | macro 0.69 · weighted 0.82 | Table 2 |
+| RegNetY-32GF, as tabulated by Tarquino et al. | 5-fold CV | 75 % ¹ | 0.76 ¹ | Table 4 |
+| Inception-ResNetV2, as tabulated by Tarquino et al. | hold-out | 59 % ¹ | 0.57 ¹ | Table 4 |
+| Siamese network, as tabulated by Tarquino et al. | hold-out | – | **0.81** ¹ | Table 4 |
+
+¹ Averaging (macro or weighted) not stated in the table.
+
+On a test set the model never saw, both of our models are well above the 2024 region-attention model (79.8 % vs 32 % macro recall). The Siamese network listed by Tarquino et al. reports a higher F1 (0.81) than our macro F1 (0.77); its averaging and split are not stated, so we list it without claiming a comparison either way.
+
+A 2025 ensemble study (MobileNetV3 + ResNet18) reports 94 % accuracy on this dataset, but its test table lists about 4,000 test images for every class — including abnormal eosinophils, which have only 8 images in the whole dataset — so its test set must contain augmented copies; we do not compare against it.
+
 ---
 
 ## Our approach
@@ -160,5 +178,7 @@ The largest confusions are between neighbours: band vs segmented neutrophils (10
 
 - Matek C., Krappe S., Münzenmayer C., Haferlach T., Marr C. *Highly accurate differentiation of bone marrow cell morphologies using deep neural networks on a large image data set.* Blood 138(20), 2021. [doi:10.1182/blood.2020010568](https://doi.org/10.1182/blood.2020010568)
 - Dataset: Bone-Marrow-Cytomorphology_MLL_Helmholtz_Fraunhofer, The Cancer Imaging Archive, [doi:10.7937/TCIA.AXH3-T579](https://doi.org/10.7937/TCIA.AXH3-T579), CC BY 4.0
+- Tarquino J. et al. *Engineered feature embeddings meet deep learning: A novel strategy to improve bone marrow cell classification and model transparency.* Journal of Pathology Informatics 15, 2024. [doi:10.1016/j.jpi.2024.100390](https://doi.org/10.1016/j.jpi.2024.100390)
+- *Automated bone marrow cell classification using ensemble learning: performance, generalization, and clinical interpretability.* [PMC13272068](https://pmc.ncbi.nlm.nih.gov/articles/PMC13272068/)
 - Ultralytics YOLO — [docs.ultralytics.com](https://docs.ultralytics.com)
 - SigLIP (Google) — [huggingface.co/google](https://huggingface.co/google)
